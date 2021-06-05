@@ -1,3 +1,3 @@
-module yggcore
+module github.com/yggworldtree/go-core
 
 go 1.16
