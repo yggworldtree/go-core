@@ -2,8 +2,8 @@ package utils
 
 import (
 	"context"
-	"math/rand"
-	"time"
+	"errors"
+	"net"
 )
 
 func EndContext(ctx context.Context) bool {
@@ -15,14 +15,29 @@ func EndContext(ctx context.Context) bool {
 	}
 }
 
-// RandomString 随机生成字符串
-func RandomString(l int) string {
-	str := "0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
-	bts := []byte(str)
-	var result []byte
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	for i := 0; i < l; i++ {
-		result = append(result, bts[r.Intn(len(bts))])
+func TcpRead(ctx context.Context, conn net.Conn, ln uint) ([]byte, error) {
+	if conn == nil || ln <= 0 {
+		return nil, errors.New("handleRead ln<0")
 	}
-	return string(result)
+	rn := uint(0)
+	rt := make([]byte, ln)
+	for {
+		if EndContext(ctx) {
+			return nil, errors.New("context dead")
+		}
+		n, err := conn.Read(rt[rn:])
+		if n > 0 {
+			rn += uint(n)
+		}
+		if rn >= ln {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		if n <= 0 {
+			return nil, errors.New("conn abort")
+		}
+	}
+	return rt, nil
 }
