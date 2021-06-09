@@ -7,29 +7,34 @@ import (
 
 // MessageBox 长连接 数据包
 type MessageBox struct {
-	Head *MessageHead
-	Body []byte
+	Head *MessageHead `json:"head,omitempty"`
+	Body []byte       `json:"body,omitempty"`
 }
 
 type MessageHead struct {
-	Id      string
-	Type    string
-	Command string
-	Args    utils.Map
-}
-type MessageReply struct {
-	Id     string
-	Status string
+	Id        string    `json:"id,omitempty"`
+	Type      string    `json:"type,omitempty"`
+	NeedReply bool      `json:"needReply,omitempty"`
+	Command   string    `json:"command,omitempty"`
+	Args      utils.Map `json:"args,omitempty"`
 }
 
-func NewMessageBox() *MessageBox {
-	return &MessageBox{
+func NewMessageBox(cmd string, args ...utils.Map) *MessageBox {
+	c := &MessageBox{
 		Head: &MessageHead{
-			Args: utils.Map{},
+			Command: cmd,
+			Args:    utils.Map{},
 		},
 	}
+	if len(args) > 0 && args[0] != nil {
+		c.Head.Args = args[0]
+	}
+	return c
 }
 func (c *MessageBox) PutBody(o interface{}) error {
+	if o == nil {
+		return nil
+	}
 	switch o.(type) {
 	case []byte:
 		c.Body = o.([]byte)
