@@ -2,6 +2,8 @@ package utils
 
 import (
 	"context"
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"net"
 )
@@ -13,6 +15,13 @@ func EndContext(ctx context.Context) bool {
 	default:
 		return false
 	}
+}
+
+func Md5String(data string) string {
+	md5 := md5.New()
+	md5.Write([]byte(data))
+	md5Data := md5.Sum([]byte(nil))
+	return hex.EncodeToString(md5Data)
 }
 
 func TcpRead(ctx context.Context, conn net.Conn, ln uint) ([]byte, error) {

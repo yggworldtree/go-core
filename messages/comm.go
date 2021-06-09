@@ -2,17 +2,20 @@ package messages
 
 import (
 	"context"
+	"errors"
 	"github.com/yggworldtree/go-core/bean/clientBean"
 )
 
-type RpleyCallbackOk func(c IEngine, m *clientBean.MessageBox)
-type RpleyCallbackErr func(c IEngine, errs ...interface{})
+var ReplyTimeoutErr = errors.New("time out")
+
+type ReplyCallbackOk func(c IEngine, m *clientBean.MessageBox)
+type ReplyCallbackErr func(c IEngine, errs error)
 type IReply interface {
 	Message() *clientBean.MessageBox
-	Ok(RpleyCallbackOk) IReply
-	Err(RpleyCallbackErr) IReply
-	OkFun() RpleyCallbackOk
-	ErrFun() RpleyCallbackErr
+	Ok(ReplyCallbackOk) IReply
+	Err(ReplyCallbackErr) IReply
+	OkFun() ReplyCallbackOk
+	ErrFun() ReplyCallbackErr
 	Exec() error
 }
 type ISender interface {

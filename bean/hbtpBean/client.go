@@ -17,3 +17,12 @@ type ClientRegInfo struct {
 func (c *ClientRegInfo) FullName() string {
 	return fmt.Sprintf("%s/%s", c.Org, c.Name)
 }
+
+type ClientRegRes struct {
+	Id    string
+	Token string
+}
+
+type ClientSubTopic struct {
+	Topics []string
+}

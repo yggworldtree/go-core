@@ -15,8 +15,8 @@ type ReplyCallback struct {
 	cncl context.CancelFunc
 
 	msg   *clientBean.MessageBox
-	okfn  RpleyCallbackOk
-	errfn RpleyCallbackErr
+	okfn  ReplyCallbackOk
+	errfn ReplyCallbackErr
 
 	once  sync.Once
 	outms time.Duration
@@ -46,19 +46,19 @@ func (c *ReplyCallback) Message() *clientBean.MessageBox {
 	c.once.Do(c.tmoutCheck)
 	return c.msg
 }
-func (c *ReplyCallback) Ok(fn RpleyCallbackOk) IReply {
+func (c *ReplyCallback) Ok(fn ReplyCallbackOk) IReply {
 	c.okfn = fn
 	return c
 }
-func (c *ReplyCallback) Err(fn RpleyCallbackErr) IReply {
+func (c *ReplyCallback) Err(fn ReplyCallbackErr) IReply {
 	c.errfn = fn
 	return c
 }
-func (c *ReplyCallback) OkFun() RpleyCallbackOk {
+func (c *ReplyCallback) OkFun() ReplyCallbackOk {
 	c.cncl()
 	return c.okfn
 }
-func (c *ReplyCallback) ErrFun() RpleyCallbackErr {
+func (c *ReplyCallback) ErrFun() ReplyCallbackErr {
 	c.cncl()
 	return c.errfn
 }
@@ -76,7 +76,7 @@ func (c *ReplyCallback) tmoutCheck() {
 			if time.Since(tm) > c.outms {
 				c.egn.RmReply(c)
 				if c.errfn != nil {
-					c.errfn(c.egn, errors.New("time out"))
+					c.errfn(c.egn, ReplyTimeoutErr)
 				}
 				break
 			}
