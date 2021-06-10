@@ -10,8 +10,10 @@ const (
 )
 
 type ClientRegInfo struct {
-	Org  string
-	Name string
+	Id    string
+	Org   string
+	Name  string
+	Alias string
 }
 
 func (c *ClientRegInfo) FullName() string {
@@ -20,6 +22,7 @@ func (c *ClientRegInfo) FullName() string {
 
 type ClientRegRes struct {
 	Id    string
+	Alias string
 	Token string
 }
 
