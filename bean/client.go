@@ -1,4 +1,4 @@
-package hbtpBean
+package bean
 
 import "fmt"
 
@@ -24,5 +24,9 @@ type ClientRegRes struct {
 }
 
 type ClientSubTopic struct {
-	Topics []string
+	Topics []*TopicInfo
 }
+
+/*type ClientPushTopic struct {
+	Topics map[string]*TopicBody
+}*/

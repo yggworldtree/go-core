@@ -3,7 +3,6 @@ package messages
 import (
 	"context"
 	"errors"
-	"github.com/yggworldtree/go-core/bean/clientBean"
 	"github.com/yggworldtree/go-core/utils"
 	"sync"
 	"time"
@@ -14,7 +13,7 @@ type ReplyCallback struct {
 	ctx  context.Context
 	cncl context.CancelFunc
 
-	msg   *clientBean.MessageBox
+	msg   *MessageBox
 	okfn  ReplyCallbackOk
 	errfn ReplyCallbackErr
 
@@ -22,7 +21,7 @@ type ReplyCallback struct {
 	outms time.Duration
 }
 
-func NewReplyCallback(egn IEngine, m *clientBean.MessageBox, outms ...time.Duration) IReply {
+func NewReplyCallback(egn IEngine, m *MessageBox, outms ...time.Duration) IReply {
 	if egn == nil || m == nil || m.Head == nil {
 		panic("param err")
 	}
@@ -39,7 +38,7 @@ func NewReplyCallback(egn IEngine, m *clientBean.MessageBox, outms ...time.Durat
 	c.ctx, c.cncl = context.WithCancel(egn.Ctx())
 	return c
 }
-func (c *ReplyCallback) Message() *clientBean.MessageBox {
+func (c *ReplyCallback) Message() *MessageBox {
 	if c.egn == nil || c.msg == nil {
 		return nil
 	}

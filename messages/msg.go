@@ -1,4 +1,4 @@
-package clientBean
+package messages
 
 import (
 	"encoding/json"

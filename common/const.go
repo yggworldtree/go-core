@@ -6,7 +6,7 @@ const (
 )
 
 const (
-	//MaxCliPathLen = 1024 * 1024 * 10
+	MaxTopicLen   = 1024 * 1024 * 10
 	MaxCliHeadLen = 1024 * 1024 * 100
 	MaxCliBodyLen = 1024 * 1024 * 1024
 )
