@@ -1,6 +1,10 @@
 package bean
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"strings"
+)
 
 type TopicPath struct {
 	NameSpace string `json:"nameSpace,omitempty"`
@@ -21,6 +25,20 @@ func NewTopicPath(namespace, key string, tag ...string) *TopicPath {
 }
 func (c *TopicPath) String() string {
 	return fmt.Sprintf("%s/%s:%s", c.NameSpace, c.Key, c.Tag)
+}
+func ParseTopicPath(s string) (*TopicPath, error) {
+	if s == "" {
+		return nil, errors.New("param blank")
+	}
+	i1 := strings.LastIndexByte(s, '/')
+	i2 := strings.LastIndexByte(s, ':')
+	if i1 <= 0 {
+		return nil, errors.New("path err")
+	}
+	if i2 < 0 {
+		i2 = len(s) - 1
+	}
+	return NewTopicPath(s[:i1], s[i1+1:i2], s[i2+1:]), nil
 }
 
 type TopicInfo struct {
