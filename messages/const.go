@@ -1,7 +1,8 @@
 package messages
 
 const (
-	MsgCmdReply    = "msg/reply"
-	MsgCmdHeart    = "msg/heart"
-	MsgCmdTopicGet = "topic/get"
+	CmdReply      = "msg/reply"
+	CmdHeart      = "msg/heart"
+	CmdTopicGet   = "topic/get"
+	CmdNetConnect = "net/connect"
 )
