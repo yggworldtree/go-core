@@ -22,7 +22,7 @@ type ReplyCallback struct {
 }
 
 func NewReplyCallback(egn IEngine, m *MessageBox, outms ...time.Duration) IReply {
-	if egn == nil || m == nil || m.Head == nil {
+	if egn == nil || m == nil || m.Info == nil {
 		panic("param err")
 	}
 	c := &ReplyCallback{

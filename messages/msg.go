@@ -3,31 +3,32 @@ package messages
 import (
 	"encoding/json"
 	"github.com/yggworldtree/go-core/utils"
+	"net/url"
 )
 
 // MessageBox 长连接 数据包
 type MessageBox struct {
-	Head *MessageHead `json:"head,omitempty"`
-	Body []byte       `json:"body,omitempty"`
+	Info   *MessageInfo `json:"info,omitempty"`
+	Head   []byte       `json:"head,omitempty"`
+	Body   []byte       `json:"body,omitempty"`
+	header *utils.Map
 }
 
-type MessageHead struct {
-	Id        string    `json:"id,omitempty"`
-	Type      string    `json:"type,omitempty"`
-	NeedReply bool      `json:"needReply,omitempty"`
-	Command   string    `json:"command,omitempty"`
-	Args      utils.Map `json:"args,omitempty"`
+type MessageInfo struct {
+	Id      string     `json:"id,omitempty"`
+	Command string     `json:"command,omitempty"`
+	Args    url.Values `json:"args,omitempty"`
 }
 
-func NewMessageBox(cmd string, args ...utils.Map) *MessageBox {
+func NewMessageBox(cmd string, args ...url.Values) *MessageBox {
 	c := &MessageBox{
-		Head: &MessageHead{
+		Info: &MessageInfo{
 			Command: cmd,
-			Args:    utils.Map{},
+			Args:    url.Values{},
 		},
 	}
 	if len(args) > 0 && args[0] != nil {
-		c.Head.Args = args[0]
+		c.Info.Args = args[0]
 	}
 	return c
 }
@@ -48,4 +49,10 @@ func (c *MessageBox) PutBody(o interface{}) error {
 		c.Body = bts
 	}
 	return nil
+}
+func (c *MessageBox) Header() *utils.Map {
+	if c.header == nil {
+		c.header = utils.NewMaps(c.Head)
+	}
+	return c.header
 }
