@@ -10,6 +10,7 @@ import (
 
 type msgInfo struct {
 	LenId   uint8
+	LenSndr uint16
 	LenCmd  uint16
 	LenArg  uint16
 	LenHead uint32
@@ -39,6 +40,13 @@ func ReadMessageBox(ctx context.Context, conn net.Conn, cfg *hbtp.Config) (*Mess
 	}
 	rt.Info.Id = string(bts)
 	ctx, _ = context.WithTimeout(ctx, cfg.TmsHead)
+	if info.LenSndr > 0 {
+		bts, err = hbtp.TcpRead(ctx, conn, uint(info.LenSndr))
+		if err != nil {
+			return nil, err
+		}
+		rt.Info.Sender = string(bts)
+	}
 	if info.LenCmd > 0 {
 		bts, err = hbtp.TcpRead(ctx, conn, uint(info.LenCmd))
 		if err != nil {
@@ -88,6 +96,7 @@ func WriteMessageBox(conn net.Conn, msg *MessageBox) error {
 	}
 	info := &msgInfo{
 		LenId:   uint8(len(msg.Info.Id)),
+		LenSndr: uint16(len(msg.Info.Sender)),
 		LenCmd:  uint16(len(msg.Info.Command)),
 		LenArg:  uint16(len(args)),
 		LenHead: uint32(len(msg.Head)),
@@ -105,6 +114,12 @@ func WriteMessageBox(conn net.Conn, msg *MessageBox) error {
 	_, err = conn.Write([]byte(msg.Info.Id))
 	if err != nil {
 		return err
+	}
+	if info.LenSndr > 0 {
+		_, err = conn.Write([]byte(msg.Info.Sender))
+		if err != nil {
+			return err
+		}
 	}
 	if info.LenCmd > 0 {
 		_, err = conn.Write([]byte(msg.Info.Command))

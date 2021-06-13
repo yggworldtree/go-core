@@ -38,14 +38,17 @@ func ParseTopicPath(s string) (*TopicPath, error) {
 	if i2 < 0 {
 		i2 = len(s) - 1
 	}
-	return NewTopicPath(s[:i1], s[i1+1:i2], s[i2+1:]), nil
+	pth := NewTopicPath(s[:i1], s[i1+1:i2], s[i2+1:])
+	if pth.NameSpace == "" || pth.Key == "" {
+		return nil, errors.New("param err")
+	}
+	if pth.Tag == "" {
+		pth.Tag = "main"
+	}
+	return pth, nil
 }
 
 type TopicInfo struct {
 	Path  *TopicPath
 	Safed bool //是否确保发送必到
-}
-
-type TopicParam struct {
-	Type string
 }

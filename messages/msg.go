@@ -16,6 +16,7 @@ type MessageBox struct {
 
 type MessageInfo struct {
 	Id      string     `json:"id,omitempty"`
+	Sender  string     `json:"sender,omitempty"`
 	Command string     `json:"command,omitempty"`
 	Args    url.Values `json:"args,omitempty"`
 }
@@ -31,6 +32,24 @@ func NewMessageBox(cmd string, args ...url.Values) *MessageBox {
 		c.Info.Args = args[0]
 	}
 	return c
+}
+func (c *MessageBox) PutHead(o interface{}) error {
+	if o == nil {
+		return nil
+	}
+	switch o.(type) {
+	case []byte:
+		c.Head = o.([]byte)
+	case string:
+		c.Head = []byte(o.(string))
+	default:
+		bts, err := json.Marshal(o)
+		if err != nil {
+			return err
+		}
+		c.Head = bts
+	}
+	return nil
 }
 func (c *MessageBox) PutBody(o interface{}) error {
 	if o == nil {
