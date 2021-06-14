@@ -7,7 +7,7 @@ import (
 
 var ReplyTimeoutErr = errors.New("time out")
 
-type ReplyCallbackOk func(c IEngine, m *MessageBox)
+type ReplyCallbackOk func(c IEngine, m *ReplyInfo)
 type ReplyCallbackErr func(c IEngine, errs error)
 type IReply interface {
 	Message() *MessageBox
@@ -15,7 +15,6 @@ type IReply interface {
 	Err(ReplyCallbackErr) IReply
 	OkFun() ReplyCallbackOk
 	ErrFun() ReplyCallbackErr
-	Exec() error
 }
 type ISender interface {
 	Sends(msg *MessageBox) error

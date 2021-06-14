@@ -49,6 +49,6 @@ func ParseTopicPath(s string) (*TopicPath, error) {
 }
 
 type TopicInfo struct {
-	Path  *TopicPath
+	Path  string
 	Safed bool //是否确保发送必到
 }

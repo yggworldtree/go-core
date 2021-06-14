@@ -21,7 +21,7 @@ type ReplyCallback struct {
 	outms time.Duration
 }
 
-func NewReplyCallback(egn IEngine, m *MessageBox, outms ...time.Duration) IReply {
+func NewReplyCallback(egn IEngine, m *MessageBox, outms ...time.Duration) *ReplyCallback {
 	if egn == nil || m == nil || m.Info == nil {
 		panic("param err")
 	}
@@ -32,10 +32,6 @@ func NewReplyCallback(egn IEngine, m *MessageBox, outms ...time.Duration) IReply
 	if len(outms) > 0 {
 		c.outms = outms[0]
 	}
-	if c.outms < time.Millisecond*100 {
-		c.outms = time.Second * 20
-	}
-	c.ctx, c.cncl = context.WithCancel(egn.Ctx())
 	return c
 }
 func (c *ReplyCallback) Message() *MessageBox {
@@ -65,15 +61,25 @@ func (c *ReplyCallback) Exec() error {
 	if c.egn == nil || c.msg == nil {
 		return errors.New("param err")
 	}
+	c.ctx, c.cncl = context.WithCancel(c.egn.Ctx())
+	if c.outms < time.Millisecond*100 {
+		c.outms = time.Second * 20
+	}
 	c.once.Do(c.tmoutCheck)
 	return c.egn.SendForReply(c)
 }
+func (c *ReplyCallback) Stop() {
+	if c.cncl != nil {
+		c.cncl()
+	}
+}
 func (c *ReplyCallback) tmoutCheck() {
-	tm := time.Now()
 	go func() {
+		tm := time.Now()
 		for !utils.EndContext(c.ctx) {
 			if time.Since(tm) > c.outms {
 				c.egn.RmReply(c)
+				c.Stop()
 				if c.errfn != nil {
 					c.errfn(c.egn, ReplyTimeoutErr)
 				}

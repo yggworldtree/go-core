@@ -30,15 +30,18 @@ func ReadMessageBox(ctx context.Context, conn net.Conn, cfg *hbtp.Config) (*Mess
 		return nil, err
 	}
 	rt := &MessageBox{
-		Info: &MessageInfo{
-			Args: url.Values{},
-		},
+		Info: &MessageInfo{},
 	}
 	bts, err = hbtp.TcpRead(ctx, conn, uint(info.LenId))
 	if err != nil {
 		return nil, err
 	}
 	rt.Info.Id = string(bts)
+	bts, err = hbtp.TcpRead(ctx, conn, 1)
+	if err != nil {
+		return nil, err
+	}
+	rt.Info.Flags = int8(bts[0])
 	ctx, _ = context.WithTimeout(ctx, cfg.TmsHead)
 	if info.LenSndr > 0 {
 		bts, err = hbtp.TcpRead(ctx, conn, uint(info.LenSndr))
@@ -87,9 +90,7 @@ func WriteMessageBox(conn net.Conn, msg *MessageBox) error {
 	if msg.Info == nil {
 		return errors.New("param err2")
 	}
-	if msg.Head == nil && msg.header != nil {
-		msg.Head = msg.header.ToBytes()
-	}
+	hds := msg.Heads()
 	var args string
 	if msg.Info.Args != nil {
 		args = msg.Info.Args.Encode()
@@ -99,7 +100,7 @@ func WriteMessageBox(conn net.Conn, msg *MessageBox) error {
 		LenSndr: uint16(len(msg.Info.Sender)),
 		LenCmd:  uint16(len(msg.Info.Command)),
 		LenArg:  uint16(len(args)),
-		LenHead: uint32(len(msg.Head)),
+		LenHead: uint32(len(hds)),
 		LenBody: uint32(len(msg.Body)),
 	}
 
@@ -112,6 +113,10 @@ func WriteMessageBox(conn net.Conn, msg *MessageBox) error {
 		return err
 	}
 	_, err = conn.Write([]byte(msg.Info.Id))
+	if err != nil {
+		return err
+	}
+	_, err = conn.Write([]byte{byte(msg.Info.Flags)})
 	if err != nil {
 		return err
 	}
@@ -134,7 +139,7 @@ func WriteMessageBox(conn net.Conn, msg *MessageBox) error {
 		}
 	}
 	if info.LenHead > 0 {
-		_, err = conn.Write(msg.Head)
+		_, err = conn.Write(hds)
 		if err != nil {
 			return err
 		}
