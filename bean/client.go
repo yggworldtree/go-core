@@ -38,6 +38,9 @@ func (c *ClientRegRes) CliGroupPath() *CliGroupPath {
 type ClientSubTopic struct {
 	Topics []*TopicInfo
 }
+type ClientUnSubTopic struct {
+	Topics []*TopicPath
+}
 
 /*type ClientPushTopic struct {
 	Topics map[string]*TopicBody

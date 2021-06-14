@@ -1,7 +1,6 @@
 package messages
 
 import (
-	hbtp "github.com/mgr9525/HyperByte-Transfer-Protocol"
 	"github.com/yggworldtree/go-core/utils"
 	"sync"
 	"time"
@@ -27,6 +26,14 @@ func NewRetryCallback(egn IEngine, m *MessageBox, retryTime time.Duration, outms
 	}
 	return c
 }
+func (c *RetryCallback) Ok(fn ReplyCallbackOk) IReply {
+	c.ReplyCallback.Ok(fn)
+	return c
+}
+func (c *RetryCallback) Err(fn ReplyCallbackErr) IReply {
+	c.ReplyCallback.Err(fn)
+	return c
+}
 func (c *RetryCallback) Exec() error {
 	err := c.ReplyCallback.Exec()
 	if err != nil {
@@ -45,7 +52,6 @@ func (c *RetryCallback) retryCheck() {
 			if time.Since(tm) > c.retryTime {
 				tm = time.Now()
 				c.egn.SendForReply(c)
-				hbtp.Debugf("retryCheck reSend:%s", c.Message().Info.Id)
 			}
 			time.Sleep(time.Millisecond)
 		}
