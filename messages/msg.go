@@ -15,8 +15,13 @@ type MessageBox struct {
 }
 
 type MessageInfo struct {
-	Id      string     `json:"id,omitempty"`
-	Sender  string     `json:"sender,omitempty"`
+	Id     string `json:"id,omitempty"`
+	Sender string `json:"sender,omitempty"`
+
+	/*
+		Flags:  0  |  0  |  0  |  0  |  0  |  0  |     0     |   0
+		Desc:   no    no    no    no    no    no   broadcast   needReply
+	*/
 	Flags   int8       `json:"flags,omitempty"`
 	Command string     `json:"command,omitempty"`
 	Args    url.Values `json:"args,omitempty"`
