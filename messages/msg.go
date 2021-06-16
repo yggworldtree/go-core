@@ -8,23 +8,23 @@ import (
 
 // MessageBox 长连接 数据包
 type MessageBox struct {
-	Info   *MessageInfo `json:"info,omitempty"`
-	Head   []byte       `json:"head,omitempty"`
-	Body   []byte       `json:"body,omitempty"`
+	Info   *MessageInfo `json:"info"`
+	Head   []byte       `json:"head"`
+	Body   []byte       `json:"body"`
 	header *utils.Map
 }
 
 type MessageInfo struct {
-	Id     string `json:"id,omitempty"`
-	Sender string `json:"sender,omitempty"`
+	Id     string `json:"id"`
+	Sender string `json:"sender"`
 
 	/*
 		Flags:  0  |  0  |  0  |  0  |  0  |  0  |     0     |   0
 		Desc:   no    no    no    no    no    no   broadcast   needReply
 	*/
-	Flags   int8       `json:"flags,omitempty"`
-	Command string     `json:"command,omitempty"`
-	Args    url.Values `json:"args,omitempty"`
+	Flags   int8       `json:"flags"`
+	Command string     `json:"command"`
+	Args    url.Values `json:"args"`
 }
 
 func NewMessageBox(cmd string, args ...url.Values) *MessageBox {
@@ -97,9 +97,9 @@ func (c *MessageBox) Header() *utils.Map {
 }
 
 type ReplyInfo struct {
-	Status string `json:"status,omitempty"`
-	Head   []byte `json:"head,omitempty"`
-	Body   []byte `json:"body,omitempty"`
+	Status string `json:"status"`
+	Head   []byte `json:"head"`
+	Body   []byte `json:"body"`
 	header *utils.Map
 }
 

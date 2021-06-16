@@ -7,9 +7,9 @@ import (
 )
 
 type TopicPath struct {
-	NameSpace string `json:"nameSpace,omitempty"`
-	Key       string `json:"key,omitempty"`
-	Tag       string `json:"tag,omitempty"`
+	NameSpace string `json:"nameSpace"`
+	Key       string `json:"key"`
+	Tag       string `json:"tag"`
 }
 
 func NewTopicPath(namespace, key string, tag ...string) *TopicPath {

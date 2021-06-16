@@ -7,9 +7,9 @@ import (
 )
 
 type CliGroupPath struct {
-	Org   string `json:"org,omitempty"`
-	Name  string `json:"name,omitempty"`
-	Alias string `json:"alias,omitempty"`
+	Org   string `json:"org"`
+	Name  string `json:"name"`
+	Alias string `json:"alias"`
 }
 
 func NewCliGroupPath(org, nm string, als ...string) *CliGroupPath {

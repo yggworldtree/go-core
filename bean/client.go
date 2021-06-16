@@ -10,10 +10,11 @@ const (
 )
 
 type ClientRegInfo struct {
-	Id    string `json:"id,omitempty"`
-	Org   string `json:"org,omitempty"`
-	Name  string `json:"name,omitempty"`
-	Alias string `json:"alias,omitempty"`
+	Id    string `json:"id"`
+	Org   string `json:"org"`
+	Name  string `json:"name"`
+	Alias string `json:"alias"`
+	Sign  string `json:"sign"`
 }
 
 func (c *ClientRegInfo) FullPath() string {
@@ -24,11 +25,11 @@ func (c *ClientRegInfo) CliGroupPath() *CliGroupPath {
 }
 
 type ClientRegRes struct {
-	Id    string `json:"id,omitempty"`
-	Org   string `json:"org,omitempty"`
-	Name  string `json:"name,omitempty"`
-	Alias string `json:"alias,omitempty"`
-	Token string `json:"token,omitempty"`
+	Id    string `json:"id"`
+	Org   string `json:"org"`
+	Name  string `json:"name"`
+	Alias string `json:"alias"`
+	Token string `json:"token"`
 }
 
 func (c *ClientRegRes) CliGroupPath() *CliGroupPath {
@@ -47,11 +48,11 @@ type ClientUnSubTopic struct {
 }*/
 
 type GroupClients struct {
-	Id    string `json:"id,omitempty"`
-	Alias string `json:"alias,omitempty"`
-	Org   string `json:"org,omitempty"`
-	Name  string `json:"name,omitempty"`
-	Count int    `json:"count,omitempty"`
+	Id    string `json:"id"`
+	Alias string `json:"alias"`
+	Org   string `json:"org"`
+	Name  string `json:"name"`
+	Count int    `json:"count"`
 }
 
 func (c *GroupClients) CliGroupPath() *CliGroupPath {
