@@ -8,6 +8,7 @@ import (
 	"net/url"
 )
 
+var lenMsgInfo=hbtp.SizeOf(new(msgInfo))
 type msgInfo struct {
 	LenId   uint8
 	LenSndr uint16
@@ -19,9 +20,8 @@ type msgInfo struct {
 
 func ReadMessageBox(ctx context.Context, conn net.Conn, cfg *hbtp.Config) (*MessageBox, error) {
 	info := &msgInfo{}
-	infoln, _ := hbtp.Size4Struct(info)
 	ctx, _ = context.WithTimeout(ctx, cfg.TmsInfo)
-	bts, err := hbtp.TcpRead(ctx, conn, uint(infoln))
+	bts, err := hbtp.TcpRead(ctx, conn, uint(lenMsgInfo))
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func WriteMessageBox(conn net.Conn, msg *MessageBox) error {
 		LenBody: uint32(len(msg.Body)),
 	}
 
-	bts, err := hbtp.Struct2Byte(info)
+	bts, err := hbtp.Struct2ByteLen(info,lenMsgInfo)
 	if err != nil {
 		return err
 	}
