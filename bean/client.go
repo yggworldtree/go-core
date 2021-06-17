@@ -14,6 +14,7 @@ type ClientRegInfo struct {
 	Org    string `json:"org"`
 	Name   string `json:"name"`
 	Alias  string `json:"alias"`
+	Subs   string `json:"subs"`
 	Sign   string `json:"sign"`
 	Secret string `json:"secret"`
 }
@@ -25,7 +26,7 @@ func (c *ClientRegInfo) CliGroupPath() *CliGroupPath {
 	return NewCliGroupPath(c.Org, c.Name, c.Alias)
 }
 func (c *ClientRegInfo) Sources() []byte {
-	s := fmt.Sprintf("%s/%s", c.Org, c.Name)
+	s := fmt.Sprintf("%s/%s|%s", c.Org, c.Name, c.Subs)
 	return []byte(s)
 }
 
