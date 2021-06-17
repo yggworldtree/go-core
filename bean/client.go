@@ -10,14 +10,15 @@ const (
 )
 
 type ClientRegInfo struct {
-	Id    string `json:"id"`
-	Org   string `json:"org"`
-	Name  string `json:"name"`
-	Alias string `json:"alias"`
-	Sign  string `json:"sign"`
+	Id     string `json:"id"`
+	Org    string `json:"org"`
+	Name   string `json:"name"`
+	Alias  string `json:"alias"`
+	Sign   string `json:"sign"`
+	Secret string `json:"secret"`
 }
 
-func (c *ClientRegInfo) FullPath() string {
+func (c *ClientRegInfo) GroupPath() string {
 	return fmt.Sprintf("%s/%s", c.Org, c.Name)
 }
 func (c *ClientRegInfo) CliGroupPath() *CliGroupPath {
