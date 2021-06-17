@@ -1,4 +1,4 @@
-package go_core
+package main
 
 import (
 	"fmt"
