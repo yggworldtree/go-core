@@ -24,6 +24,10 @@ func (c *ClientRegInfo) GroupPath() string {
 func (c *ClientRegInfo) CliGroupPath() *CliGroupPath {
 	return NewCliGroupPath(c.Org, c.Name, c.Alias)
 }
+func (c *ClientRegInfo) Sources() []byte {
+	s := fmt.Sprintf("%s/%s", c.Org, c.Name)
+	return []byte(s)
+}
 
 type ClientRegRes struct {
 	Id    string `json:"id"`

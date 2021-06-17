@@ -16,10 +16,13 @@ func NewTopicPath(namespace, key string, tag ...string) *TopicPath {
 	c := &TopicPath{
 		NameSpace: namespace,
 		Key:       key,
-		Tag:       "main",
+		Tag:       "",
 	}
 	if len(tag) > 0 && tag[0] != "" {
 		c.Tag = tag[0]
+	}
+	if c.Tag == "" {
+		c.Tag = "main"
 	}
 	return c
 }

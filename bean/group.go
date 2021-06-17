@@ -16,10 +16,13 @@ func NewCliGroupPath(org, nm string, als ...string) *CliGroupPath {
 	c := &CliGroupPath{
 		Org:   org,
 		Name:  nm,
-		Alias: "main",
+		Alias: "",
 	}
 	if len(als) > 0 && als[0] != "" {
 		c.Alias = als[0]
+	}
+	if c.Alias == "" {
+		c.Alias = "main"
 	}
 	return c
 }
