@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/yggworldtree/go-core/bean"
+	"github.com/yggworldtree/go-core/common"
 	"testing"
 )
 
@@ -26,38 +26,8 @@ func Test2(t *testing.T) {
 	}
 	println("msg2:" + m.String())
 }
-
-type Person struct {
-}
-
-func (this *Person) Eat() {
-	fmt.Println("Person Eat")
-}
-
-func (this *Person) Run() {
-	fmt.Println("Person Run")
-}
-
-func (this *Person) Sleep() {
-	fmt.Println("Person Sleep")
-}
-
-type Man struct {
-	Person
-}
-
-func (this *Man) Eat() {
-	// 类似于Java的 super.Eat()
-	fmt.Println("Man Eat")
-	this.Person.Eat()
-}
-
-func (this *Man) Run() {
-	fmt.Println("Man Run")
-}
 func Test3(t *testing.T) {
-	m := &Man{}
-	m.Eat()
-	m.Run()
-	m.Sleep()
+	s := "123ms"
+	ms := common.RegTms.FindAllStringSubmatch(s, -1)[0]
+	println(ms)
 }
