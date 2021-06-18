@@ -3,7 +3,7 @@ package messages
 import (
 	"context"
 	"errors"
-	"github.com/yggworldtree/go-core/utils"
+	hbtp "github.com/mgr9525/HyperByte-Transfer-Protocol"
 	"sync"
 	"time"
 )
@@ -76,7 +76,7 @@ func (c *ReplyCallback) Stop() {
 func (c *ReplyCallback) tmoutCheck() {
 	go func() {
 		tm := time.Now()
-		for !utils.EndContext(c.ctx) {
+		for !hbtp.EndContext(c.ctx) {
 			if time.Since(tm) > c.outms {
 				c.egn.RmReply(c)
 				c.Stop()

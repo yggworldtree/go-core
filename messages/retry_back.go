@@ -1,7 +1,7 @@
 package messages
 
 import (
-	"github.com/yggworldtree/go-core/utils"
+	hbtp "github.com/mgr9525/HyperByte-Transfer-Protocol"
 	"sync"
 	"time"
 )
@@ -48,7 +48,7 @@ func (c *RetryCallback) Exec() error {
 func (c *RetryCallback) retryCheck() {
 	go func() {
 		tm := time.Now()
-		for !utils.EndContext(c.ctx) {
+		for !hbtp.EndContext(c.ctx) {
 			if time.Since(tm) > c.retryTime {
 				tm = time.Now()
 				c.egn.SendForReply(c)
