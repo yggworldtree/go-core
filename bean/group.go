@@ -21,9 +21,9 @@ func NewCliGroupPath(org, nm string, als ...string) *CliGroupPath {
 	if len(als) > 0 && als[0] != "" {
 		c.Alias = als[0]
 	}
-	if c.Alias == "" {
+	/* if c.Alias == "" {
 		c.Alias = "main"
-	}
+	} */
 	return c
 }
 func (c *CliGroupPath) Path() string {
@@ -47,9 +47,6 @@ func ParseCliGroupPath(s string) (*CliGroupPath, error) {
 	pth := NewCliGroupPath(s[:i1], s[i1+1:i2], s[i2+1:])
 	if pth.Org == "" || pth.Name == "" {
 		return nil, errors.New("param err")
-	}
-	if pth.Alias == "" {
-		pth.Alias = "main"
 	}
 	return pth, nil
 }
