@@ -24,9 +24,11 @@ func (c *Timer) Tick() bool {
 		return true
 	}
 }
-func (c *Timer) Reset(tmd time.Duration, now ...bool) {
-	c.tmd = tmd
-	if len(now) > 0 && now[0] {
+func (c *Timer) Reset(now bool, tmd ...time.Duration) {
+	if len(tmd) > 0 {
+		c.tmd = tmd[0]
+	}
+	if now {
 		c.tms = time.Now()
 	} else {
 		c.tms = time.Time{}
