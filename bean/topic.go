@@ -51,7 +51,11 @@ func ParseTopicPath(s string) (*TopicPath, error) {
 	return pth, nil
 }
 
-type TopicInfo struct {
-	Path  string
-	Safed bool //是否确保发送必到
+type TopicSubInfo struct {
+	Path  string `json:"path"`
+	Safed bool   `json:"safed"` //是否确保发送必到
+}
+
+type TopicPushInfo struct {
+	Path string `json:"path"`
 }

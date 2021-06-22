@@ -2,9 +2,10 @@ package bean
 
 import (
 	"fmt"
-	"github.com/yggworldtree/go-core/common"
 	"strconv"
 	"time"
+
+	"github.com/yggworldtree/go-core/common"
 )
 
 const (
@@ -15,14 +16,15 @@ const (
 )
 
 type ClientRegInfo struct {
-	Id      string `json:"id"`
-	Org     string `json:"org"`
-	Name    string `json:"name"`
-	Alias   string `json:"alias"`
-	Subs    string `json:"subs"`
-	MaxFreq string `json:"maxFreq"`
-	Sign    string `json:"sign"`
-	Secret  string `json:"secret"`
+	Id        string `json:"id"`
+	Org       string `json:"org"`
+	Name      string `json:"name"`
+	Alias     string `json:"alias"`
+	Frequency string `json:"frequency"`
+	Subs      []TopicSubInfo
+	Pushs     []TopicPushInfo
+	Sign      string `json:"sign"`
+	Secret    string `json:"secret"`
 }
 
 func (c *ClientRegInfo) GroupPath() string {
@@ -31,16 +33,12 @@ func (c *ClientRegInfo) GroupPath() string {
 func (c *ClientRegInfo) CliGroupPath() *CliGroupPath {
 	return NewCliGroupPath(c.Org, c.Name, c.Alias)
 }
-func (c *ClientRegInfo) Sources() []byte {
-	s := fmt.Sprintf("%s/%s|%s|%s", c.Org, c.Name, c.Subs, c.MaxFreq)
-	return []byte(s)
-}
 func (c *ClientRegInfo) MaxFreqTm() time.Duration {
 	bs := time.Second
-	if !common.RegTms.MatchString(c.MaxFreq) {
+	if !common.RegTms.MatchString(c.Frequency) {
 		return bs
 	}
-	s := common.RegTms.FindAllStringSubmatch(c.MaxFreq, -1)[0]
+	s := common.RegTms.FindAllStringSubmatch(c.Frequency, -1)[0]
 	switch s[2] {
 	case "h":
 		bs = time.Hour
@@ -69,7 +67,7 @@ func (c *ClientRegRes) CliGroupPath() *CliGroupPath {
 }
 
 type ClientSubTopic struct {
-	Topics []*TopicInfo
+	Topics []*TopicPath
 }
 type ClientUnSubTopic struct {
 	Topics []*TopicPath
